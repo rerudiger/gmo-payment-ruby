@@ -596,6 +596,60 @@ module GMO
         post_request name, options
       end
 
+      ## AmazonPay V2
+      ## Ref: https://docs.mul-pay.jp/amazonpayv2/payg-api
+      # EntryTranAmazonpay transaction registration
+      # We will issue the transaction ID and transaction password required
+      # for subsequent settlement transactions and start the transaction.
+      def entry_tran_amazonpay(options = {})
+        name = "EntryTranAmazonpay.idPass"
+        required = [:order_id, :job_cd, :amount, :amazonpay_type, :payment_type]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      # ExecTranAmazonpay Charge Execution
+      # We will return the tokens required for subsequent settlement transactions.
+      def exec_tran_amazonpay(options = {})
+        name = "ExecTranAmazonpay.idPass"
+        required = [:order_id, :access_id, :access_pass, :ret_URL, :amazon_checkout_session_id]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      # AmazonpaySales Sales capture
+      # Sales capture will be made for the settlement of Authorization.
+      # At the time of execution, the amount of money is checked with that
+      # of the Authorization.
+      def capture_tran_amazonpay(options = {})
+        name = "AmazonpaySales.idPass"
+        required = [:access_id, :access_pass, :order_id, :amount]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      alias_method :sales_tran_amazonpay, :capture_tran_amazonpay
+
+      # AmazonpayCancel Cancel
+      # Cancel the target transaction.
+      # Partial refunds are available for transactions that are in Sales capture or Instant capture.
+      def cancel_tran_amazonpay(options = {})
+        name = "AmazonpayCancel.idPass"
+        required = [:access_id, :access_pass, :order_id, :cancel_amount]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      # AmazonpayChange Amount change
+      # Change the amount of the target transaction.
+      # Only transactions in the Authorization state are possible.
+      def change_tran_amazonpay(options = {})
+        name = "AmazonpayChange.idPass"
+        required = [:access_id, :access_pass, :order_id, :amount]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
       private
 
         def api_call(name, args = {}, verb = "post", options = {})
