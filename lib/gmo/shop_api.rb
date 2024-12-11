@@ -73,6 +73,26 @@ module GMO
         post_request name, options
       end
 
+      # 【PayPal決済】
+      #  取引登録
+      #  これ以降の決済取引で必要となる取引IDと取引パスワードの発行を行い、取引を開始します。
+      def entry_tran_paypal(options = {})
+        name = "EntryTranPaypal.idPass"
+        required = [:order_id, :job_cd, :amount]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      # 【銀行振込（バーチャル口座 あおぞら）】
+      #  取引登録
+      #  オーダーIDを指定して取引を登録します。
+      def entry_tran_ganb(options = {})
+        name = "EntryTranGANB.idPass"
+        required = [:order_id, :amount]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
       # 【LINE Pay決済】
       #  20.1.2.1. 取引登録
       #  これ以降の決済取引で必要となる取引IDと取引パスワードの発行を行い、取引を開始します。
@@ -154,6 +174,69 @@ module GMO
       def entry_tran_docomo(options = {})
         name = "EntryTranDocomo.idPass"
         required = [:order_id, :job_cd, :amount]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      ### @params ###
+      # OrderID
+      # Amount
+      # Tax
+      ### @return ###
+      # AccessID
+      # AccessPass
+      ### example ###
+      # gmo.entry_tran_virtualaccount({
+      #   order_id: "ord12345",
+      #   tax: "0001001",
+      #   amount: 100
+      # })
+      # => {"AccessID"=>"139f8ec33a07c55f406937c52ce4473d", "AccessPass"=>"2689b204d2c17192fa35f9269fa7e744"}
+      def entry_tran_virtualaccount(options = {})
+        name = "EntryTranVirtualaccount.idPass"
+        required = [:order_id, :amount]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      ### @params ###
+      # OrderID
+      # Amount
+      # Tax
+      ### @return ###
+      # AccessID
+      # AccessPass
+      ### example ###
+      # gmo.entry_tran_suica({
+      #   order_id: "ord12345",
+      #   tax: "0001001",
+      #   amount: 100
+      # })
+      # => {"AccessID"=>"139f8ec33a07c55f406937c52ce4473d", "AccessPass"=>"2689b204d2c17192fa35f9269fa7e744"}
+      def entry_tran_suica(options = {})
+        name = "EntryTranSuica.idPass"
+        required = [:order_id, :amount]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      ### @params ###
+      # OrderID
+      # Amount
+      # Tax
+      ### @return ###
+      # AccessID
+      # AccessPass
+      ### example ###
+      # gmo.entry_tran_edy({
+      #   order_id: "ord12345",
+      #   tax: "0001001",
+      #   amount: 100
+      # })
+      # => {"AccessID"=>"139f8ec33a07c55f406937c52ce4473d", "AccessPass"=>"2689b204d2c17192fa35f9269fa7e744"}
+      def entry_tran_edy(options = {})
+        name = "EntryTranEdy.idPass"
+        required = [:order_id, :amount]
         assert_required_options(required, options)
         post_request name, options
       end
@@ -261,6 +344,26 @@ module GMO
         post_request name, options
       end
 
+      # 【PayPal決済】
+      # 決済実行
+      # PayPalと通信を行い決済要求結果を返します。
+      def exec_tran_paypal(options = {})
+        name = "ExecTranPaypal.idPass"
+        required = [:access_id, :access_pass, :order_id, :item_name, :redirect_url]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      # 【銀行振込（バーチャル口座 あおぞら）】
+      # 決済実行
+      # 登録された取引に対してバーチャル口座を発行します。
+      def exec_tran_ganb(options = {})
+        name = "ExecTranGANB.idPass"
+        required = [:access_id, :access_pass, :order_id]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
       # 【LINE Pay決済】
       # 20.1.2.2. 決済実行
       def exec_tran_linepay(options = {})
@@ -284,6 +387,33 @@ module GMO
       def exec_tran_docomo(options = {})
         name = "ExecTranDocomo.idPass"
         required = [:access_id, :access_pass, :order_id]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      # 【銀行振込(バーチャル口座)決済】
+      # 18.1.2.2. 決済実行
+      def exec_tran_virtualaccount(options = {})
+        name = "ExecTranVirtualaccount.idPass"
+        required = [:access_id, :access_pass, :order_id, :trade_days]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      # 【モバイルSuica決済】
+      # 18.1.2.2. 決済実行
+      def exec_tran_suica(options = {})
+        name = "ExecTranSuica.idPass"
+        required = [:access_id, :access_pass, :order_id, :item_name, :mail_address]
+        assert_required_options(required, options)
+        post_request name, options
+      end
+
+      # 【楽天Edy決済】
+      # 18.1.2.2. 決済実行
+      def exec_tran_edy(options = {})
+        name = "ExecTranEdy.idPass"
+        required = [:access_id, :access_pass, :order_id, :mail_address]
         assert_required_options(required, options)
         post_request name, options
       end
